@@ -1,0 +1,43 @@
+<!-- This requires self-hosting the page, as I'm too lazy to host it -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Website Blocker and DNS Emulator</title>
+  </head>
+  <body>
+    <h1>DNS Emulator</h1>
+    <p>Block requests from filtering extensions, and therefore bypassing their filters.</p>
+    <p style="display:none;" id="err">This page was not opened correctly. Please follow the directions on the repository to fix this. If this is a bug, please report it.</p>
+    <button onclick = "DNSon()">Enable DNS Emulation!</button>
+    <button onclick = "DNSoff()">Disable DNS Emulation</button>
+    <script>
+      try {
+        var chrome = opener.chrome;
+      } catch(e) {
+        document.getElementById("err").style.display = "block";
+        var items = document.querySelectorAll("*");
+        for (var i = 0; i < items.length; i++) {
+          if (items[i].id != "err") {
+            items[i].style.display = "none";
+          }
+        }
+      }
+      // this is just rlly stupid dns configuration method
+      function blockFilteringDomains(details) {
+        if (details.url.includes('securly.com') || details.url.includes('goguardian.com') || details.url.includes('lanschool.com') || details.url.includes('linewize.com') || details.url.includes('blocksi.net') || details.url.includes('fortinet.com') || details.url.includes('cisco.com') || details.url.includes('imperosoftware.com') || details.url.includes('hapara.com') || details.url.includes('iboss.com') || details.url.includes('lightspeedsystems.com') || details.url.includes('cdw.com') || details.url.includes('mobileguardian.com') || details.url.includes('imtlazarus.com') || details.url.includes('backdrop.cloud')) {
+          return { cancel: true };  // Block the request
+        }
+      }
+      function DNSon() {
+        chrome.webRequest.onBeforeRequest.addListener(
+          blockFilteringDomains,
+          { urls: ["<all_urls>"] },
+          ["blocking"]
+        );
+      }
+      function DNSoff() {
+        chrome.webRequest.onBeforeRequest.removeListener(blockFilteringDomains);
+      }
+    </script>
+  </body>
+</html>
