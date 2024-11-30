@@ -1,0 +1,2 @@
+Drag the link into a new marker on the autofills page on this data url
+data:text/html,<a href="about:blank" target="_blank" rel="opener" contenteditable="false">like this one</a>
